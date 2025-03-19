@@ -36,7 +36,6 @@ public class OrderController {
       response.append("orderId",order.getOrderId());
       return ResponseEntity.ok(response.toJson());
     } catch (DataAccessException e) {
-      e.printStackTrace();
       response.append("message",e.getMessage());
       return ResponseEntity.badRequest().body(response.toJson());
     }
