@@ -1,10 +1,18 @@
 package vttp.batch4.csf.ecommerce;
 
+import java.io.StringReader;
+import java.math.RoundingMode;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.bson.Document;
 
 import jakarta.json.Json;
+import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
+import vttp.batch4.csf.ecommerce.models.Cart;
+import vttp.batch4.csf.ecommerce.models.LineItem;
+import vttp.batch4.csf.ecommerce.models.Order;
 import vttp.batch4.csf.ecommerce.models.Product;
 
 public class Utils {
@@ -37,5 +45,41 @@ public class Utils {
       .add("image", product.getImage())
       .add("quantity", product.getQuantity())
       .build();
+  }
+
+  public static Order toOrder(String payload) {
+    JsonObject object = Json.createReader(new StringReader(payload)).readObject();
+    Order order = new Order();
+
+    order.setName(object.getString("name"));
+    order.setAddress(object.getString("address"));
+    order.setPriority(object.getBoolean("priority"));
+    order.setComments(object.getString("comments"));
+
+    JsonArray lineItemsArray = object.getJsonObject("cart").getJsonArray("lineItems");
+
+    order.setCart(toCart(lineItemsArray));
+
+    return order;
+  }
+
+  private static Cart toCart(JsonArray array){
+    List<LineItem> lineItems = new LinkedList<>();
+    for(int i = 0; i < array.size(); i++){
+      LineItem lineItem = new LineItem();
+      JsonObject object = array.getJsonObject(i);
+
+      lineItem.setProductId(object.getString("prodId"));
+      lineItem.setQuantity(object.getInt("quantity"));
+      lineItem.setName(object.getString("name"));
+      
+      // Round off price to 2 decimal places
+      lineItem.setPrice(object.getJsonNumber("price").bigDecimalValue().setScale(2,RoundingMode.HALF_UP).floatValue());
+
+      lineItems.add(lineItem);
+    }
+    Cart cart = new Cart();
+    cart.setLineItems(lineItems);
+    return cart;
   }
 }
