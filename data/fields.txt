@@ -1,0 +1,9 @@
+ProductName
+Brand
+Price
+DiscountPrice
+Image_Url
+Quantity
+Category
+SubCategory
+Absolute_Url
