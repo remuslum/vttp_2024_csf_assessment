@@ -1,4 +1,13 @@
 <h2>Products for {{ category }}</h2>
+@for(item of itemsInCart$ | async; track $index){
+  <p>
+    {{item | json}}
+  </p>
+}
+
+<h3>
+  {{countOfItems$ | async}}
+</h3>
 
 <div *ngIf="products$ | async as products">
   <div *ngIf="products.length > 0">
@@ -16,7 +25,8 @@
         </div>
       </div>
       <div class="order-form">
-        <app-order-form [productId]="p.prodId"/>
+        <app-order-form [productId]="p.prodId" [productName]="p.name"
+        [productPrice]="p.discountPrice"/>
       </div>
     </div>
   </div>
