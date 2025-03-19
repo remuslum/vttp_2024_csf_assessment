@@ -36,4 +36,12 @@ export class CartStore extends ComponentStore<Cart>{
             return store.lineItems.length
         }
     )
+
+    readonly resetItems = this.updater<LineItem[]>(
+        (store:Cart, itemsToAdd:LineItem[]) => {
+            return {
+                lineItems : itemsToAdd
+            } as Cart
+        }
+    )
 }

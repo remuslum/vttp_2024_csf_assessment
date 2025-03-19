@@ -66,6 +66,7 @@ export class ConfirmCheckoutComponent implements OnInit{
       alert(response.orderId)
     })
     .catch((error) => alert(error.message))
+    this.store.resetItems([])
     this.router.navigate(["/"])
   }
   
