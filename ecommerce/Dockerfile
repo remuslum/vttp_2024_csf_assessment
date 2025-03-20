@@ -21,7 +21,8 @@ COPY src src
 COPY .mvn .mvn
 
 # Copy the angular application over to static directory
-COPY --from=build_angular /src/dist/client-side/browser/* src/main/resources/static
+# The * only copies files and ignore directories
+COPY --from=build_angular /src/dist/client-side/browser/ src/main/resources/static
 
 # Make mvnw executable
 RUN chmod a+x mvnw
